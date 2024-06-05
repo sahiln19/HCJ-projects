@@ -1,34 +1,34 @@
-const seconds = document.querySelector(".seconds .number"),
-  minutes = document.querySelector(".minutes .number"),
-  hours = document.querySelector(".hours .number"),
-  days = document.querySelector(".days .number");
+// Set the date we're counting down to
+const launchDate = new Date("Jul 1, 2024 00:00:00").getTime();
 
-let secValue = 11,
-  minValue = 2,
-  hourValue = 2,
-  dayValue = 9;
+// Update the count down every 1 second
+const countdownFunction = setInterval(() => {
+    // Get today's date and time
+    const now = new Date().getTime();
 
-const timeFunction = setInterval(() => {
-  secValue--;
+    // Find the distance between now and the launch date
+    const distance = launchDate - now;
 
-  if (secValue === 0) {
-    minValue--;
-    secValue = 60;
-  }
-  if (minValue === 0) {
-    hourValue--;
-    minValue = 60;
-  }
-  if (hourValue === 0) {
-    dayValue--;
-    hourValue = 24;
-  }
+    // Time calculations for days, hours, minutes, and seconds
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  if (dayValue === 0) {
-    clearInterval(timeFunction);
-  }
-  seconds.textContent = secValue < 10 ? `0${secValue}` : secValue;
-  minutes.textContent = minValue < 10 ? `0${minValue}` : minValue;
-  hours.textContent = hourValue < 10 ? `0${hourValue}` : hourValue;
-  days.textContent = dayValue < 10 ? `0${dayValue}` : dayValue;
-}, 1000); //1000ms = 1s
+    // Display the result in the elements with class="number"
+    document.querySelector('.days .number').innerHTML = days;
+    document.querySelector('.hours .number').innerHTML = hours;
+    document.querySelector('.minutes .number').innerHTML = minutes;
+    document.querySelector('.seconds .number').innerHTML = seconds;
+
+    // If the count down is finished, write some text
+    if (distance < 0) {
+        clearInterval(countdownFunction);
+        document.querySelector('.days .number').innerHTML = "0";
+        document.querySelector('.hours .number').innerHTML = "0";
+        document.querySelector('.minutes .number').innerHTML = "0";
+        document.querySelector('.seconds .number').innerHTML = "0";
+        document.querySelector('header').innerHTML = "We are live!";
+        document.querySelector('.email p').innerHTML = "Thank you for your interest!";
+    }
+}, 1000);
